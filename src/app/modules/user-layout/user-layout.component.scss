@@ -1,0 +1,15 @@
+mat-drawer-container {
+  height: 100%;
+  mat-drawer {
+    width: 190px !important;
+    mat-nav-list {
+      a {
+        border-bottom: 1px solid #e0e0e0;
+      }
+    }
+  }
+}
+
+mat-menu-item {
+  width: 100% !important;
+}

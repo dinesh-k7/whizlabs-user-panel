@@ -1,0 +1,232 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+// Imports for Angular Material Theming
+
+@import "~@angular/material/theming";
+@include mat-core();
+
+// Light theme
+$light-primary: mat-palette($mat-indigo);
+$light-accent: mat-palette($mat-pink, A200, A100, A400);
+$light-theme: mat-light-theme($light-primary, $light-accent);
+
+// Dark theme
+$dark-primary: mat-palette($mat-pink);
+$dark-accent: mat-palette($mat-indigo, A200, A100, A400);
+$dark-warn: mat-palette($mat-deep-orange);
+$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+@media (prefers-color-scheme: light) {
+  @include angular-material-theme($light-theme);
+}
+
+@media (prefers-color-scheme: dark) {
+  @include angular-material-theme($dark-theme);
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+  height: 100%;
+  background-color: rgb(235, 235, 235);
+}
+
+/* @media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+    }
+
+    .mat-card {
+        background-color: #201f1f;
+    }
+
+    .mat-form-field-empty.mat-form-field-label {
+        color: #3F51B5;
+    }
+
+    .mat-form-field-underline {
+        background-color: #3F51B5 !important;
+    }
+
+    .mat-form-field-underline .mat-form-field-ripple{
+        background-color: #3F51B5 !important;
+    }
+
+    h1,h2,h3,h4 {
+        color: #3F51B5;
+    }
+} */
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+}
+
+label {
+  font-family: Roboto;
+}
+
+.spacer {
+  flex: 1 1 auto !important;
+}
+
+.table-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.01);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-form-container,
+.department-form-container {
+  margin: 25px;
+  form {
+    display: grid;
+    justify-items: center;
+    padding: 65px 0;
+    mat-form-field.mat-form-field {
+      width: 300px;
+    }
+  }
+}
+
+.button-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 15px;
+  padding-top: 20px !important;
+  button {
+    margin-right: 20px;
+  }
+}
+
+/* Structure */
+.table-container {
+  overflow: auto;
+  height: auto;
+  width: 80vw;
+  margin: 5vh auto 9vh auto !important;
+}
+
+.add-button {
+  position: absolute;
+  top: 15vh;
+  /*right:15vw;*/
+  right: 13vw;
+  color: #fff;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
+  z-index: 2;
+}
+
+/* Column Widths */
+.mat-column-number,
+.mat-column-state {
+  max-width: 64px;
+}
+
+.mat-column-created {
+  max-width: 124px;
+}
+
+/* applyFilter */
+.table-header {
+  padding: 0px 8px 0px 24px;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 75vw;
+  height: 10vh !important;
+  padding: 8px;
+}
+.table-header {
+  padding-top: 3vh !important;
+}
+
+.button-row,
+.mat-column-personid {
+  display: flex;
+  justify-content: center;
+}
+
+.card-header {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  color: #707070;
+  font-size: 24px;
+}
+
+.mat-step-header {
+  pointer-events: none !important;
+}
+
+.stepper-button-container {
+  display: grid;
+  grid-template-columns: 100px 100px;
+  grid-column-gap: 15px;
+  padding: 20px 30px 15px 0px;
+  justify-content: end;
+  button:nth-child(2) {
+    background-color: #3f51b5;
+    color: #fff !important;
+  }
+  button:nth-child(1) {
+    background-color: #fff;
+  }
+}
+
+.stepper-button-container-one {
+  display: grid;
+  grid-template-columns: 100px;
+  padding: 20px 30px 15px 0px;
+  justify-content: end;
+  button {
+    background-color: #3f51b5;
+    color: #fff !important;
+  }
+}
+
+button.mat-menu-item {
+  width: auto !important;
+}
