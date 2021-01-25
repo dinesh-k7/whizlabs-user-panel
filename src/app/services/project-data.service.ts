@@ -1,14 +1,11 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { CONSTANT } from "~app/utils/constant";
 
 import { Response } from "~app/models/response";
 
-import { Provider } from "~base/provider";
 import { Observable, BehaviorSubject } from "rxjs";
-import { map } from "rxjs/operators";
 
-import { IUser } from "~models/user";
 import { IProjectData } from "~models/project-data";
 
 @Injectable()
@@ -52,27 +49,24 @@ export class ProjectDataService {
   }
 
   public $getByUserId(
-    sortActive: string,
-    order: string,
-    pageSize: number,
-    page: number,
-    search: string,
+    // sortActive: string,
+    // order: string,
+    // pageSize: number,
+    // page: number,
+    // search: string,
     user_id: number
   ): Observable<any> {
-    let params = new HttpParams();
-    params = params.append("active", sortActive);
-    params = params.append("order", order);
-    params = params.append("search", search);
-    params = params.append("pageSize", pageSize.toString());
-    params = params.append("page", page.toString());
+    // let params = new HttpParams();
+    // params = params.append("active", sortActive);
+    // params = params.append("order", order);
+    // params = params.append("search", search);
+    // params = params.append("pageSize", pageSize.toString());
+    // params = params.append("page", page.toString());
     return this.http.get<Response>(
-      CONSTANT.routes.project_data.get_by_userid.replace(
-        ":id",
-        String(user_id)
-      ),
-      {
-        params: params,
-      }
+      CONSTANT.routes.project_data.get_by_userid.replace(":id", String(user_id))
+      // {
+      //   params: params,
+      // }
     );
   }
 

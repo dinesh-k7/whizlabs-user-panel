@@ -31,7 +31,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
+import { MatTreeModule } from "@angular/material/tree";
 
 @NgModule({
   imports: [
@@ -67,6 +67,7 @@ import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatTreeModule,
   ],
   exports: [
     MatAutocompleteModule,
@@ -101,6 +102,7 @@ import { STEPPER_GLOBAL_OPTIONS } from "@angular/cdk/stepper";
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatTreeModule,
   ],
 })
 export class MaterialComponentsModule {}

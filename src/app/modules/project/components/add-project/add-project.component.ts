@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input, Inject } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +12,8 @@ import { IFormData } from "~models/form-data";
 import { UserService } from "~services/user.service";
 import { ProjectDataService } from "~services/project-data.service";
 import { IDivision } from "~app/models/division";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { IModalForm } from "~app/models/dialog-data";
 
 @Component({
   selector: "app-add-project",
@@ -19,6 +21,7 @@ import { IDivision } from "~app/models/division";
   styleUrls: ["./add-project.component.scss"],
 })
 export class AddProjectComponent implements OnInit {
+  @Input("divisionId") divisionId: number;
   addProjectForm: FormGroup;
   dynamicForm: FormGroup;
   user: IUser;
@@ -32,31 +35,18 @@ export class AddProjectComponent implements OnInit {
   isFormSubmitted: boolean;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private userService: UserService,
+    public dialogRef: MatDialogRef<AddProjectComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: IModalForm,
     private projectDataService: ProjectDataService,
     private router: Router
   ) {}
 
   ngOnInit() {
     this.userId = JSON.parse(sessionStorage.getItem("user_id"));
-    this.projectDataService.isFormSubmitted.subscribe(
-      (status) => (this.isFormSubmitted = status)
-    );
-    this.createForm();
-    this.getDivisions();
-  }
-
-  private getDivisions() {
-    this.userService.$getDivision(this.userId).subscribe((data) => {
-      this.divisionList = data;
-    });
-  }
-
-  public createForm() {
-    this.addProjectForm = this.formBuilder.group({
-      division_id: [null, [Validators.required]],
-    });
+    if (this.data) {
+      const { division_id } = this.data;
+      this.getFormField(division_id);
+    }
   }
 
   public onSubmit(user: IUser) {}
@@ -65,7 +55,7 @@ export class AddProjectComponent implements OnInit {
     this.router.navigate(["/"]);
   }
 
-  public onChange(division_id: number): void {
+  public getFormField(division_id: number): void {
     if (division_id) {
       this.selectedDivisionId = division_id;
       this.isLoading = true;
@@ -78,7 +68,8 @@ export class AddProjectComponent implements OnInit {
               this.divisionFieldId.push(formControl.id);
               const controlName = formControl.name
                 .toLowerCase()
-                .replace(" ", "_");
+                .split(" ")
+                .join("_");
 
               formGroup[controlName] = new FormControl("");
               this.formData.push({
@@ -99,5 +90,9 @@ export class AddProjectComponent implements OnInit {
         }
       );
     }
+  }
+
+  public onClose(id: number) {
+    this.dialogRef.close(id);
   }
 }

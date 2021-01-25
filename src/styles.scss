@@ -130,9 +130,9 @@ label {
 
 .button-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 15px;
+  grid-template-columns: 1fr;
   padding-top: 20px !important;
+  padding-left: 30px;
   button {
     margin-right: 20px;
   }

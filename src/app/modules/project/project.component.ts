@@ -9,15 +9,27 @@ import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 
-import { merge, of as observableOf } from "rxjs";
+import { merge, of as observableOf, BehaviorSubject } from "rxjs";
 import { catchError, map, startWith, switchMap } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { FlatTreeControl, NestedTreeControl } from "@angular/cdk/tree";
+import { MatTreeNestedDataSource } from "@angular/material/tree";
 
 import { AuthService } from "~services/auth.service";
 import { ProjectDataService } from "~services/project-data.service";
-import { ConfirmComponent } from "~components/confirm/confirm.component";
+
+/**
+ * Food data with nested structure.
+ * Each node has a name and an optional list of children.
+ */
+interface ProjectNode {
+  name: string;
+  id: number;
+  type: string;
+  children?: ProjectNode[];
+}
 
 @Component({
   selector: "app-project",
@@ -25,26 +37,14 @@ import { ConfirmComponent } from "~components/confirm/confirm.component";
   styleUrls: ["./project.component.scss"],
 })
 export class ProjectComponent implements OnInit {
-  public displayedColumns = [
-    "id",
-    "department_name",
-    "division_name",
-    "action",
-  ];
-  public pageSizeOptions = [5, 10, 20, 40, 100];
-  public pageSize = 20;
-  public dataSource: any = new MatTableDataSource();
-  public pageEvent: PageEvent;
-  public resultsLength = 0;
-  public page = 1;
-  public isLoading = false;
-  public isTotalReached = false;
-  public totalItems = 0;
-  public search = "";
   public userId: number;
-
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  public departmentId: number;
+  public treeControl = new NestedTreeControl<ProjectNode>(
+    (node) => node.children
+  );
+  public dataSource = new MatTreeNestedDataSource<ProjectNode>();
+  public isLoading = false;
+  public child: boolean;
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private authService: AuthService,
@@ -54,87 +54,54 @@ export class ProjectComponent implements OnInit {
     public snack: MatSnackBar
   ) {}
 
+  hasChild = (_: number, node: ProjectNode) => true;
+
   ngOnInit(): void {
+    // this.dataSource.data = this.treeConstruct(TREE_DATA);
     if (!this.authService.loggedIn.getValue()) {
       this.router.navigate(["/login"]);
     }
     this.userId = JSON.parse(sessionStorage.getItem("user_id"));
+    this.departmentId = JSON.parse(sessionStorage.getItem("department_id"));
   }
 
   ngAfterViewInit() {
     this.getData();
+  }
+  showChildren(node) {
+    this.child = node.type === "child" ? true : false;
   }
 
   ngAfterViewChecked() {
     this.changeDetectorRef.detectChanges();
   }
 
-  public onPaginateChange(event: any): void {
-    this.page = event.pageIndex + 1;
-    this.pageSize = event.pageSize;
-    this.getData();
-  }
-
-  public applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim().toLowerCase();
-    this.getData();
-  }
-
   public getData(): void {
-    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-
-    merge(this.sort.sortChange, this.paginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          this.isLoading = true;
-          return this.projectDataService.$getByUserId(
-            this.sort.active,
-            this.sort.direction,
-            this.pageSize,
-            this.page,
-            this.search,
-            this.userId
-          );
-        }),
-        map((projectList) => {
-          this.isLoading = false;
-          this.isTotalReached = false;
-          this.totalItems = projectList["length"];
-          return projectList;
-        }),
-        catchError(() => {
-          this.isLoading = false;
-          this.isTotalReached = true;
-          return observableOf([]);
-        })
-      )
-      .subscribe((data) => (this.dataSource.data = data));
-  }
-
-  public editProject(projectId: number, divisionId: number): void {
-    this.router.navigate([`/edit-project/${projectId}/${divisionId}`]);
-  }
-
-  public deleteProject(project_id: number): void {
-    const dialogRef = this.dialog.open(ConfirmComponent, {
-      width: "400px",
-      data: {
-        title: "Delete record",
-        message: "Are you sure you want to delete this Project Detail?",
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.projectDataService.$delete(project_id).subscribe((data: any) => {
-          this.paginator._changePageSize(this.paginator.pageSize);
+    this.isLoading = true;
+    this.projectDataService.$getByUserId(this.userId).subscribe(
+      (projectData) => {
+        this.isLoading = false;
+        const division = [];
+        projectData.map((d) => {
+          division.push({
+            name: d.division_name,
+            id: d.division_id,
+            type: "child",
+          });
         });
+        const [department] = projectData;
+        const treeData = [];
+        treeData.push({
+          name: department.department_name,
+          id: this.departmentId,
+          type: "parent",
+          children: division,
+        });
+        this.dataSource.data = treeData;
+      },
+      () => {
+        this.isLoading = false;
       }
-    });
-  }
-
-  public addProject(): void {
-    this.router.navigate(["/add-project"]);
+    );
   }
 }

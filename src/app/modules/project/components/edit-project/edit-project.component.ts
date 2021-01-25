@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -12,6 +12,8 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { UserService } from "~services/user.service";
 import { ProjectDataService } from "~services/project-data.service";
 import { IDivision } from "~app/models/division";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { IModalForm } from "~app/models/dialog-data";
 
 @Component({
   selector: "app-edit-project",
@@ -32,6 +34,8 @@ export class EditProjectComponent implements OnInit {
   projectData: any;
   divisionId: number;
   constructor(
+    public dialogRef: MatDialogRef<EditProjectComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: IModalForm,
     private formBuilder: FormBuilder,
     private userService: UserService,
     private router: Router,
@@ -40,21 +44,17 @@ export class EditProjectComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.projectId = +this.activateRoute.snapshot.paramMap.get("id");
-    this.divisionId = +this.activateRoute.snapshot.paramMap.get("divisionId");
     this.userId = JSON.parse(sessionStorage.getItem("user_id"));
+    if (this.data) {
+      const { division_id, project_id } = this.data;
+      this.divisionId = division_id;
+      this.projectId = project_id;
+      this.createForm();
+      this.getDynamicForm(this.divisionId);
+    }
     this.projectDataService.isFormSubmitted.subscribe(
       (status) => (this.isFormSubmitted = status)
     );
-    this.createForm();
-    this.getDivisions();
-    this.getDynamicForm(this.divisionId);
-  }
-
-  private getDivisions(): void {
-    this.userService.$getDivision(this.userId).subscribe((data) => {
-      this.divisionList = data;
-    });
   }
 
   private getProjectDetail(id: number): void {
@@ -120,7 +120,7 @@ export class EditProjectComponent implements OnInit {
     }
   }
 
-  public onDone(): void {
-    this.router.navigate(["/"]);
+  public onClose(id: number) {
+    this.dialogRef.close(id);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Router } from "@angular/router";
 
 import { ProjectDataService } from "~services/project-data.service";
@@ -14,6 +14,7 @@ export class DynamicFormComponent implements OnInit {
   @Input("divisionId") divisionId: number;
   @Input("divisionFieldId") divisionFieldId: number[];
   @Input("projectId") projectId: number;
+  @Output() onClose = new EventEmitter<any>();
   isLoading: boolean;
   constructor(
     private readonly projectDataService: ProjectDataService,
@@ -39,6 +40,7 @@ export class DynamicFormComponent implements OnInit {
         this.projectDataService.$update(data, this.projectId).subscribe(
           () => {
             this.isLoading = false;
+            this.onClose.emit(this.divisionId);
           },
           () => {
             this.isLoading = false;
@@ -48,7 +50,7 @@ export class DynamicFormComponent implements OnInit {
         this.projectDataService.$save(data).subscribe(
           () => {
             this.isLoading = false;
-            this.projectDataService.formSubmitted.next(true);
+            this.onClose.emit(this.divisionId);
           },
           () => {
             this.isLoading = false;
@@ -59,6 +61,6 @@ export class DynamicFormComponent implements OnInit {
   }
 
   public onCancel(): void {
-    this.router.navigate(["/"]);
+    this.router.navigate([""]);
   }
 }

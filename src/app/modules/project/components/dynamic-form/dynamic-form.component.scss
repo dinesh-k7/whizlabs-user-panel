@@ -1,0 +1,8 @@
+.form-container {
+  display: grid;
+  grid-template-columns: 300px;
+  justify-content: center;
+  mat-form-field {
+    width: 300px;
+  }
+}

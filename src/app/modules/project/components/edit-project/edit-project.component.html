@@ -1,79 +1,13 @@
-<div class="animated fadeIn mat-elevation-z20 department-form-container">
-  <mat-card-content>
-    <mat-horizontal-stepper>
-      <mat-step label="Step 1">
-        <div class="form-container">
-          <!-- Loader -->
-          <div class="table-loading-shade" *ngIf="isLoading">
-            <mat-spinner *ngIf="isLoading"></mat-spinner>
-          </div>
-
-          <mat-card-header class="card-header">
-            <mat-card-title>Project Detail</mat-card-title>
-          </mat-card-header>
-
-          <form [formGroup]="editProjectForm" novalidate>
-            <mat-form-field>
-              <mat-label>Select Division</mat-label>
-              <mat-select formControlName="division_id" disabled>
-                <mat-option
-                  *ngFor="let d of divisionList"
-                  [value]="d.division_id"
-                >
-                  {{ d.division_name }}
-                </mat-option>
-              </mat-select>
-              <mat-error
-                *ngIf="
-                  editProjectForm.controls.division_id.touched &&
-                  editProjectForm.controls.division_id.invalid
-                "
-              >
-                <span
-                  *ngIf="editProjectForm.controls.division_id.errors.required"
-                  >This field is mandatory.</span
-                >
-              </mat-error>
-            </mat-form-field>
-          </form>
-        </div>
-
-        <div class="stepper-button-container">
-          <button
-            type="button"
-            class="mat-raised-button"
-            mat-button
-            (click)="onDone()"
-          >
-            Cancel
-          </button>
-          <button mat-button matStepperNext color="primary">Next</button>
-        </div>
-      </mat-step>
-
-      <mat-step label="Step 2">
-        <app-dynamic-form
-          *ngIf="dynamicForm"
-          [dynamicForm]="dynamicForm"
-          [formData]="formData"
-          [divisionId]="selectedDivisionId"
-          [divisionFieldId]="divisionFieldId"
-          [projectId]="projectId"
-        ></app-dynamic-form>
-        <div class="stepper-button-container">
-          <button
-            type="button"
-            class="mat-raised-button"
-            mat-button
-            matStepperPrevious
-          >
-            Back
-          </button>
-          <button mat-button matStepperNext color="primary" (click)="onDone()">
-            Done
-          </button>
-        </div>
-      </mat-step>
-    </mat-horizontal-stepper>
-  </mat-card-content>
+<div class="table-loading-shade" *ngIf="isLoading">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
 </div>
+
+<app-dynamic-form
+  *ngIf="dynamicForm"
+  [dynamicForm]="dynamicForm"
+  [formData]="formData"
+  [divisionId]="selectedDivisionId"
+  [divisionFieldId]="divisionFieldId"
+  [projectId]="projectId"
+  (onClose)="onClose($event)"
+></app-dynamic-form>

@@ -6,6 +6,7 @@ import { ProjectComponent } from "./project.component";
 import { RouterModule } from "@angular/router";
 import { SharedModule } from "~app/utils/shared.module";
 import { DynamicFormComponent } from "./components/dynamic-form/dynamic-form.component";
+import { ProjectListComponent } from "./components/project-list/project-list.component";
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import { DynamicFormComponent } from "./components/dynamic-form/dynamic-form.com
     EditProjectComponent,
     ProjectComponent,
     DynamicFormComponent,
+    ProjectListComponent,
   ],
   imports: [
     RouterModule.forChild([
