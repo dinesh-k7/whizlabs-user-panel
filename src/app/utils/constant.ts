@@ -1,6 +1,6 @@
 import { IFormData } from "~models/form-data";
-//const HOST = "https://whizlabs-node-service.herokuapp.com";
-const HOST = "http://localhost:3020";
+const HOST = "https://whizlabs-node-service.herokuapp.com";
+//const HOST = "http://localhost:3020";
 
 export const CONSTANT = {
   permissions: {},
