@@ -1,27 +1,16 @@
-import {
-  Component,
-  AfterViewInit,
-  ViewChild,
-  ChangeDetectorRef,
-  OnInit,
-} from "@angular/core";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
+import { Component, ChangeDetectorRef, OnInit } from "@angular/core";
 
-import { merge, of as observableOf, BehaviorSubject } from "rxjs";
-import { catchError, map, startWith, switchMap } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { FlatTreeControl, NestedTreeControl } from "@angular/cdk/tree";
+import { NestedTreeControl } from "@angular/cdk/tree";
 import { MatTreeNestedDataSource } from "@angular/material/tree";
 
 import { AuthService } from "~services/auth.service";
 import { ProjectDataService } from "~services/project-data.service";
 
 /**
- * Food data with nested structure.
+ * Project data with nested structure.
  * Each node has a name and an optional list of children.
  */
 interface ProjectNode {

@@ -1,14 +1,10 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { CONSTANT } from "~app/utils/constant";
 
 import { Response } from "~app/models/response";
 
-import { Provider } from "~base/provider";
 import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
-
-import { IUser } from "~models/user";
 
 @Injectable()
 export class UserService {
